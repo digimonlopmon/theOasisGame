@@ -30,7 +30,11 @@ var playState = {
     background.anchor.setTo(0.5,0.5);
     background.scale.setTo(1.5,1.5);
 
+<<<<<<< HEAD
     oasis = game.add.sprite(600, 600, 'tree');
+=======
+    oasis = game.add.image(610, 470, 'tree');
+>>>>>>> 269cd3d735d00c6ad7d9548199d78320b3e501ff
     oasis.anchor.setTo(1,1);
     oasis.scale.setTo(1.5,1.5);
     oasis.enableBody = true;
@@ -174,6 +178,13 @@ createEnemy: function(){
     enemy.enableBody = true;
     game.physics.arcade.enable(enemy);
     game.physics.arcade.moveToXY(enemy, 600, 600, 50);
+
+
+
+
+
+    //Future work: There need to have a board check to remove those enemies after they walked over the game screen
+    
 },
 
 createEnergy: function(){
