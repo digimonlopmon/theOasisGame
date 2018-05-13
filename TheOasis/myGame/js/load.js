@@ -11,6 +11,7 @@ var loadState = {
         game.load.image('Dead', 'assets/img/Dead.png');
         game.load.image('background', 'assets/img/Background.png');
         game.load.image('energy', 'assets/img/citrus.png');
+        game.load.image('water', 'assets/img/water.png');
 	},
 
 	create: function(){

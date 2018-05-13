@@ -1,15 +1,5 @@
-/*var render = function(){};
-var endTimer = function(){};
-var formatTime = function(){};
-var createEnemy = function(){};
-var createEnergy = function(){};
-var killenemy = function(){};
-var killenergy = function(){};
-var createTimer = function(){};
-var updateTimer = function(){};*/
-
-var timer, timerEvent, text;
-
+var counter = 30;
+var text = 30;
 var player;
 var up;
 var down;
@@ -17,37 +7,52 @@ var left;
 var right;
 var velocity;
 var enemy;
+var enemies;
 var energy;
+var energies;
 var background;
 var oasis;
+var water;
+var havewater;
+var wateronplayer = false;
 var kill = 0;
 var timerstop = false;
 var eat;
 var drink;
+var collect;
 
 var playState = {
 	create: function() {
 	// place your assets
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    timer = game.time.create();
-
-	timerEvent = timer.add(Phaser.Timer.MINUTE * 1 + Phaser.Timer.SECOND * 0, this.endTimer, this);
-
-	timer.start();
-
     background = game.add.image(300,300, 'background');
     background.anchor.setTo(0.5,0.5);
     background.scale.setTo(1.5,1.5);
 
-    oasis = game.add.image(600, 600, 'tree');
+    oasis = game.add.sprite(600, 600, 'tree');
     oasis.anchor.setTo(1,1);
-    oasis.scale.setTo(2,2);
+    oasis.scale.setTo(1.5,1.5);
     oasis.enableBody = true;
     game.physics.arcade.enable(oasis);
 
-    game.time.events.repeat(Phaser.Timer.SECOND * 3, 100, this.createEnemy, this);
-    game.time.events.repeat(Phaser.Timer.SECOND * 15, 100, this.createEnergy, this);
+    water = game.add.sprite(40, 40, 'water');
+    water.anchor.setTo(0.5, 0.5);
+    water.scale.setTo(1,1);
+    water.enableBody = true;
+    game.physics.arcade.enable(water);
+
+    enemies = game.add.group();
+    enemies.enableBody = true;
+    game.physics.enable(enemies);
+
+    game.time.events.loop(Phaser.Timer.SECOND * 2, this.createEnemy, this);
+
+    energies = game.add.group();
+    energies.enableBody = true;
+    game.physics.enable(energies);
+
+    game.time.events.loop(Phaser.Timer.SECOND * 15, this.createEnergy, this);
 
     player = game.add.sprite(300,500, 'player');
     player.anchor.setTo(0.5,0.5);
@@ -56,20 +61,32 @@ var playState = {
     game.physics.arcade.enable(player);
     player.body.collideWorldBounds = true;
 
+    havewater = game.add.text(16, 570, 'Water: None', { fontSize: '16px', fill: '#000' });
+
+    text = game.add.text(550, 580, 'TimeLeft: 30', { font: "16px", fill: "#ffffff"});
+    text.anchor.setTo(0.5, 0.5);
+
+    game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
+
     up = game.input.keyboard.addKey(Phaser.Keyboard.UP);
     down = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
     eat = game.input.keyboard.addKey(Phaser.Keyboard.X);
     drink = game.input.keyboard.addKey(Phaser.Keyboard.C);
+    collect = game.input.keyboard.addKey(Phaser.Keyboard.Z);
 
 },
 
 update: function() {
 	// run game loop
+	oasis.visible = false;
 
-    game.physics.arcade.overlap(player, enemy, this.killenemy, null, this);
-    game.physics.arcade.overlap(player, energy, this.killenergy, null, this);
+    game.physics.arcade.overlap(player, enemies, this.killenemy, null, this);
+    game.physics.arcade.overlap(oasis, enemies, this.killenemies, null, this);
+    game.physics.arcade.overlap(player, energies, this.killenergy, null, this);
+    game.physics.arcade.overlap(player, water, this.getwater, null, this);
+    game.physics.arcade.overlap(player, oasis, this.dropwater, null, this);
 
     player.body.velocity.x = 0;
     player.body.velocity.y = 0;
@@ -138,39 +155,20 @@ update: function() {
         player.body.velocity.x = 100;
     }
 
-    if(timerstop == true){
+    if(counter == 0){
     	game.state.start('over');
-    	timerstop = false;
-    	timer.start();
+    	counter = 30;
     }
 
 },
 
-render: function () {
-        // If our timer is running, show the time in a nicely formatted way, else show 'Done!'
-        if (timer.running) {
-            game.debug.text(this.formatTime(Math.round((timerEvent.delay - timer.ms) / 1000)), 270, 586, '#fff');
-        }
-        else {
-            game.debug.text("Gameover!", 270, 586, '#fff ');
-            timerstop = true;
-        }
-    },
-
-endTimer: function() {
-        // Stop the timer when the delayed event triggers
-        timer.stop();
-    },
-
-formatTime: function(s) {
-        // Convert seconds (s) to a nicely formatted and padded time string
-        var minutes = "0" + Math.floor(s / 60);
-        var seconds = "0" + (s - minutes * 60);
-        return minutes.substr(-2) + ":" + seconds.substr(-2);   
-    },
+updateCounter: function(){
+    counter--;
+    text.setText('TimeLeft: ' + counter);
+},
 
 createEnemy: function(){
-	enemy = game.add.sprite(game.world.randomX, 0, 'enemy');
+	enemy = enemies.create(game.world.randomX, 0, 'enemy');
 	enemy.anchor.setTo(0.5,0.5);
     enemy.scale.setTo(2,2);
     enemy.enableBody = true;
@@ -179,11 +177,26 @@ createEnemy: function(){
 },
 
 createEnergy: function(){
-    energy = game.add.sprite(570, 30, 'energy');
+    energy = energies.create(570, 30, 'energy');
     energy.anchor.setTo(0.5,0.5);
     energy.scale.setTo(1,1);
     energy.enableBody = true;
     game.physics.arcade.enable(energy);
+},
+
+getwater: function(){
+	if(collect.isDown){
+		havewater.text = "Water: obtained";
+        wateronplayer = true;
+	}
+},
+
+dropwater: function(){
+	if(collect.isDown && wateronplayer == true){
+		havewater.text = "Water: None";
+		wateronplayer = false;
+        counter = 30;
+	}
 },
 
 killenemy: function(player, enemy){
@@ -191,6 +204,12 @@ killenemy: function(player, enemy){
        	enemy.kill();
 	    kill++;
     }
+},
+
+killenemies: function(oasis, enemy){
+	enemy.kill();
+	game.state.start('over');
+	counter = 30;
 },
 
 killenergy: function(player, energy){
