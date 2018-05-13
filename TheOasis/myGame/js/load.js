@@ -9,7 +9,8 @@ var loadState = {
         game.load.spritesheet('enemy', 'assets/img/enemy.png');
         game.load.image('tree', 'assets/img/Tree.png');
         game.load.image('Dead', 'assets/img/Dead.png');
-        game.load.image('background', 'assets/img/SAND.png');
+        game.load.image('background', 'assets/img/Background.png');
+        game.load.image('energy', 'assets/img/citrus.png');
 	},
 
 	create: function(){

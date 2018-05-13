@@ -1,6 +1,12 @@
-var render = function(){};
+/*var render = function(){};
 var endTimer = function(){};
 var formatTime = function(){};
+var createEnemy = function(){};
+var createEnergy = function(){};
+var killenemy = function(){};
+var killenergy = function(){};
+var createTimer = function(){};
+var updateTimer = function(){};*/
 
 var timer, timerEvent, text;
 
@@ -10,10 +16,14 @@ var down;
 var left;
 var right;
 var velocity;
-var enemies;
+var enemy;
+var energy;
 var background;
 var oasis;
 var kill = 0;
+var timerstop = false;
+var eat;
+var drink;
 
 var playState = {
 	create: function() {
@@ -28,28 +38,21 @@ var playState = {
 
     background = game.add.image(300,300, 'background');
     background.anchor.setTo(0.5,0.5);
-    background.scale.setTo(50,50);
+    background.scale.setTo(1.5,1.5);
 
     oasis = game.add.image(600, 600, 'tree');
     oasis.anchor.setTo(1,1);
-    oasis.scale.setTo(1.5,1.5);
+    oasis.scale.setTo(2,2);
     oasis.enableBody = true;
-    
-    enemies = game.add.group();
-    enemies.enableBody = true;
-    //game.physics.arcade.enable(enemies);
+    game.physics.arcade.enable(oasis);
 
-    for(var i = 0; i < 5; i++){
-        var enemy = enemies.create(game.rnd.integerInRange(0, game.width), game.rnd.integerInRange(0, game.height/2), 'enemy');
-        enemy.anchor.setTo(0.5,0.5);
-        enemy.scale.setTo(2,2);
-        enemy.body.collideWorldBounds = true;
-    }
+    game.time.events.repeat(Phaser.Timer.SECOND * 3, 100, this.createEnemy, this);
+    game.time.events.repeat(Phaser.Timer.SECOND * 15, 100, this.createEnergy, this);
 
     player = game.add.sprite(300,500, 'player');
     player.anchor.setTo(0.5,0.5);
     player.scale.setTo(1,1);
-    //player.enableBody = true;
+    player.enableBody = true;
     game.physics.arcade.enable(player);
     player.body.collideWorldBounds = true;
 
@@ -57,12 +60,16 @@ var playState = {
     down = game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
     left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+    eat = game.input.keyboard.addKey(Phaser.Keyboard.X);
+    drink = game.input.keyboard.addKey(Phaser.Keyboard.C);
 
 },
 
 update: function() {
 	// run game loop
-    game.physics.arcade.overlap(player, enemies, killenemy, null, this);
+
+    game.physics.arcade.overlap(player, enemy, this.killenemy, null, this);
+    game.physics.arcade.overlap(player, energy, this.killenergy, null, this);
 
     player.body.velocity.x = 0;
     player.body.velocity.y = 0;
@@ -131,6 +138,12 @@ update: function() {
         player.body.velocity.x = 100;
     }
 
+    if(timerstop == true){
+    	game.state.start('over');
+    	timerstop = false;
+    	timer.start();
+    }
+
 },
 
 render: function () {
@@ -140,6 +153,7 @@ render: function () {
         }
         else {
             game.debug.text("Gameover!", 270, 586, '#fff ');
+            timerstop = true;
         }
     },
 
@@ -147,6 +161,7 @@ endTimer: function() {
         // Stop the timer when the delayed event triggers
         timer.stop();
     },
+
 formatTime: function(s) {
         // Convert seconds (s) to a nicely formatted and padded time string
         var minutes = "0" + Math.floor(s / 60);
@@ -154,12 +169,40 @@ formatTime: function(s) {
         return minutes.substr(-2) + ":" + seconds.substr(-2);   
     },
 
+createEnemy: function(){
+	enemy = game.add.sprite(game.world.randomX, 0, 'enemy');
+	enemy.anchor.setTo(0.5,0.5);
+    enemy.scale.setTo(2,2);
+    enemy.enableBody = true;
+    game.physics.arcade.enable(enemy);
+    game.physics.arcade.moveToXY(enemy, 600, 600, 50);
+},
+
+createEnergy: function(){
+    energy = game.add.sprite(570, 30, 'energy');
+    energy.anchor.setTo(0.5,0.5);
+    energy.scale.setTo(1,1);
+    energy.enableBody = true;
+    game.physics.arcade.enable(energy);
+},
+
+killenemy: function(player, enemy){
+    if(eat.isDown){
+       	enemy.kill();
+	    kill++;
+    }
+},
+
+killenergy: function(player, energy){
+	if(drink.isDown){
+		energy.kill();
+	    kill = 0;
+	}
+},
+
 };
 
-function killenemy(player, enemy){
-    enemy.kill();
-    kill ++;
-}
+
 
 
 
