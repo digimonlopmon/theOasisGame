@@ -4,6 +4,9 @@ var overState = {
 		//create title screen background
         
         //title screen bgm looping
+         bgm = game.add.audio('die');
+        bgm.loop = false;
+        bgm.play();
         
         //title screen text
 		var overLabel = game.add.text(170, 150, 'Gameover!', {font: '60px', fill: '#ffffff'});
@@ -15,6 +18,7 @@ var overState = {
 
         //press space to start the game
 		space.onDown.addOnce(this.restart, this);
+
 	},
 
     restart: function(){
