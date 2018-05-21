@@ -24,7 +24,7 @@ var eat; //key for player to eat enemy and energy drink
 var collect; //key for player to get and drop water
 var bgm; //bgm var
 
-var playState = {
+var tutorialState = {
 	create: function() {
 	//enable arcade physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -58,13 +58,13 @@ var playState = {
     enemies = game.add.group();
     enemies.enableBody = true;
     game.physics.enable(enemies);
-    game.time.events.loop(Phaser.Timer.SECOND * 3, this.createEnemy, this);
+    game.time.events.loop(Phaser.Timer.SECOND * 4, this.createEnemy, this);
 
     //create energy drinks
     energies = game.add.group();
     energies.enableBody = true;
     game.physics.enable(energies);
-    game.time.events.loop(Phaser.Timer.SECOND * 15, this.createEnergy, this);
+    game.time.events.loop(Phaser.Timer.SECOND * 10, this.createEnergy, this);
 
     //create the player
     player = game.add.sprite(300,500, 'player');
@@ -83,8 +83,8 @@ var playState = {
     game.time.events.loop(Phaser.Timer.SECOND, this.updateCounter, this);
 
     //level counter
-    leveltext1 = game.add.text(300, 30, 'Stage time left: 120', { font: "24px", fill: "#000"});
-    leveltext1.anchor.setTo(0.5, 0.5);
+    leveltext = game.add.text(300, 30, 'Stage time left: 60', { font: "24px", fill: "#000"});
+    leveltext.anchor.setTo(0.5, 0.5);
     game.time.events.loop(Phaser.Timer.SECOND, this.levelCounter, this);
 
     //create movement arrow keys and action keys
@@ -189,7 +189,7 @@ update: function() {
     }
 
     //start win state if the level counter runs out
-    if(level1 == 0){
+    if(level == 0){
         game.state.start('win');
         counter = 30;
         kill = 0;
@@ -207,10 +207,10 @@ updateCounter: function(){
     text.setText('TimeLeft: ' + counter);
 },
 
-//the level counter function
+//the level counter function 
 levelCounter: function(){
-    level1--;
-    leveltext1.setText('Stage time left: ' + level1);
+    level--;
+    leveltext.setText('Stage time left: ' + level);
 },
 
 //function for creating enemy
@@ -220,7 +220,7 @@ createEnemy: function(){
     enemy.scale.setTo(2,2);
     enemy.enableBody = true;
     game.physics.arcade.enable(enemy);
-    game.physics.arcade.moveToXY(enemy, 600, 600, game.rnd.integerInRange(30, 60));
+    game.physics.arcade.moveToXY(enemy, 600, 600, game.rnd.integerInRange(20, 50));
     //Future work: There need to have a board check to remove those enemies after they walked over the game screen
     
 },

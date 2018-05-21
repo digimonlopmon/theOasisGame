@@ -12,11 +12,7 @@ var loadState = {
         game.load.image('background', 'assets/img/Background.png');
         game.load.image('energy', 'assets/img/citrus.png');
         game.load.image('water', 'assets/img/water.png');
-
-
-
-
-         game.load.audio('die', 'assets/audio/die.wav');
+        game.load.audio('die', 'assets/audio/die.wav');
         game.load.audio('bgm', 'assets/audio/bgm.mp3');
         
 	},

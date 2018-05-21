@@ -19,7 +19,7 @@ var menuState = {
 
     start: function(){
     	//state changing
-    	game.state.start('play');
+    	game.state.start('tutorial');
 
     	//stop looping the title screen bgm
 

@@ -1,10 +1,11 @@
+var bgm;
 var overState = {
 	create: function(){
 
 		//create title screen background
         
         //title screen bgm looping
-         bgm = game.add.audio('die');
+        bgm = game.add.audio('die');
         bgm.loop = false;
         bgm.play();
         
@@ -24,7 +25,8 @@ var overState = {
     restart: function(){
     	//state changing
     	game.state.start('menu');
-
+        
+        bgm.pause();
     	//stop looping the title screen bgm
 
     }
