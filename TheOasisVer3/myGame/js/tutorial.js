@@ -33,7 +33,7 @@ var tutorialState = {
     game.physics.startSystem(Phaser.Physics.ARCADE);
     
     //create bgm
-    bgm = game.add.audio('bgm');
+    bgm = game.add.audio('bgm1');
     bgm.volume = 0.5;
     bgm.loop = true;
     bgm.play();

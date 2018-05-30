@@ -17,6 +17,8 @@ var loadState = {
         game.load.atlasJSONHash('title', 'assets/img/menu.png', 'assets/img/menu.json');
         game.load.audio('die', 'assets/audio/die.wav');
         game.load.audio('bgm', 'assets/audio/bgm.mp3');
+        game.load.audio('bgm1', 'assets/audio/bgm1.wav');
+        game.load.audio('bgm2', 'assets/audio/bgm2.wav');
         
 	},
 
