@@ -1,0 +1,28 @@
+{"frames": {
+
+"enemy.png":
+{
+	"frame": {"x":0,"y":0,"w":30,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":40},
+	"sourceSize": {"w":30,"h":40}
+},
+"enemy1.png":
+{
+	"frame": {"x":0,"y":40,"w":30,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":30,"h":40},
+	"sourceSize": {"w":30,"h":40}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "enemy.png",
+	"format": "RGBA8888",
+	"size": {"w":30,"h":80},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:8033f94bb33d59114105e6aa436ea43c:a07a3182925cb33e4e7406b120734b38:a99356c10d69482e9bee53d25c3d05e1$"
+}
+}
