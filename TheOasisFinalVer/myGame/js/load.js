@@ -18,7 +18,7 @@ var loadState = {
         game.load.image('success', 'assets/img/win.png');
         game.load.image('gameover', 'assets/img/gameover.png');
         game.load.image('fragment', 'assets/img/fragment.png');
-        game.load.image('instruction', 'assets/img/Instructions.png');
+        game.load.image('instruction', 'assets/img/instructions.png');
         game.load.image('credits', 'assets/img/Credits.png');
         game.load.audio('die', 'assets/audio/die.wav');
         game.load.audio('win', 'assets/audio/win.wav');
